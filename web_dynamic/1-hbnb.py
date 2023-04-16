@@ -2,9 +2,9 @@
 """ Starts a Flash Web Application """
 from models import storage
 from models.state import State
+from models.city import City
 from models.amenity import Amenity
 from models.place import Place
-from models.city import City
 from os import environ
 from flask import Flask, render_template
 from uuid import uuid4
@@ -13,16 +13,15 @@ app = Flask(__name__)
 # app.jinja_env.lstrip_blocks = True
 
 
-
 @app.teardown_appcontext
 def close_db(error):
-    """remove SQLAlchemy session"""
+    """ Remove the current SQLAlchemy Session """
     storage.close()
 
 
-@app.route('/0-hbnb', strict_slashes=False)
+@app.route('/1-hbnb', strict_slashes=False)
 def hbnb():
-    """start hbnb"""
+    """ HBNB is alive! """
     states = storage.all(State).values()
     states = sorted(states, key=lambda k: k.name)
     st_ct = []
@@ -38,14 +37,14 @@ def hbnb():
     places = storage.all(Place).values()
     places = sorted(places, key=lambda k: k.name)
 
-    return render_template('100-hbnb.html',
-                           states=st_ct,
-                           amenities=amenities,
-                           places=places,
-                           cache_id=uuid4()
-                           )
+    return render_template('1-hbnb.html',
+        states=st_ct,
+        amenities=amenities,
+        places=places,
+        cache_id=uuid4()
+    )
 
 
 if __name__ == "__main__":
-    """main"""
+    """ Main Function """
     app.run(host='0.0.0.0', port=5000)
